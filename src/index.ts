@@ -7,6 +7,8 @@ interface CacheEntry {
 }
 
 const parseCacheDuration = (response: string): number => {
+  // Uncomment to see the reasoning output from the AI
+  console.log(response);
   const cleanResponse = response.replace(/<think>[\s\S]*?<\/think>/, '').trim();
   const words = cleanResponse.split(/\s+/);
   const lastWord = words[words.length - 1];
@@ -19,7 +21,7 @@ const app = new Hono<{ Bindings: CloudflareBindings }>()
 app.get('*', async (c) => {
   const url = new URL(c.req.url);
   const cacheKey = url.pathname;
-  
+
   const cached = await c.env.CACHE.get(cacheKey);
   if (cached) {
     try {
